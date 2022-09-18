@@ -1,0 +1,360 @@
+<!-- 563492ad6f91700001000001b0e8d60ebdd841db89405f916e4ab74f -->
+
+<!-- https://api.pexels.com/v1/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo API Search App</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        body {
+            text-align: center;
+            font-family: sans-serif;
+        }
+        #photo-grid {
+            justify-content: center;
+            margin: 490px 20px 0 20px;
+            padding: 0;
+            columns: 3;
+        }
+
+        .photo-div {
+          flex-grow: 1;
+        }
+        .each-img {
+          height: auto;
+          margin: 10px 0;
+          width: 100%;
+        } 
+
+        #navbar-container {
+            height: 90px;
+            display: flex;
+            top: 0;
+            z-index: 100;
+            position: sticky;
+        }
+
+        .nav-link, .dropbtn {
+            margin: 33px 0;
+            display: flex;
+            align-content: space-around;
+            height: 20px;
+            padding: 0 15px;
+            z-index: 9;
+            font-size: 19px;
+            color: white;
+        }
+
+        #upload-btn {
+          font-size: 19px;
+          height: 37px;
+          margin-top: 20px;
+          width: 210px;
+          padding-top: 13px;
+          border-radius: 8px;
+          z-index: 9;
+          color: black;
+          background-color: white;
+          margin-right: 40px;
+        }
+
+        form {
+            width: 100%;
+            height: 60px;
+            margin: 20px 0;
+            display: flex;
+            z-index: 9;
+        }
+        .search-bar {
+            width: calc(100% - 50px);
+            padding: 15px 4px 15px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            border: none;
+        }
+
+        #main {
+            width: 1000px;
+        }
+        #pexels-logo-one {
+            font-size: 25px;
+            font-family: sans-serif;
+            margin-left: 15px;
+        }
+
+        #pexels-logo {
+            margin-left: 30px;
+            margin-top: -13px;
+            height: 50px;
+        }
+
+        /* Dropdown Button */
+        .dropbtn {
+          color: rgb(79, 78, 78);
+          font-size: 19px;
+          border: none;
+          cursor: pointer;
+          margin: 14px 0;
+        }
+
+        .white-nav {
+          background-color: white;
+        }
+
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          position: relative;
+          display: inline-block;
+          height: 50px;
+          margin: 20px 0;
+          /* background-color: hotpink; */
+        }
+
+        .dropdown > button {
+          background-color: transparent;
+          color: white;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: grey;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          background-color: white;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd}
+
+        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+        .show {display:block;}
+
+        .search-button {
+          background: transparent;
+          border: none;
+          outline: none;
+          margin-left: -33px;
+        }
+
+        .search-button img {
+          width: 20px;
+          height: 20px;
+          object-fit: cover;
+        }
+
+        #notification-dropbtn {
+          width: 20px;
+          height: 20px;
+        }
+
+        #img-wrapper {
+          position: absolute;
+          width: 100%;
+          height: 570px;
+          top: 0;
+          left: 0;
+          z-index: 8;
+        }
+
+        #img-wrapper:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(4, 4, 4, 0.344);
+          z-index: 8;
+        }
+
+        #header-img {
+          background-size: auto;
+          width: 100%;
+          height: 570px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 7;
+        }
+
+        #header-content {
+          z-index: 9;
+          position: absolute;
+          color: white;
+          font-size: 38px;
+          width: 700px;
+          /* background-color: red; */
+          top: 200px;
+          left: 50%;
+          margin-left: -350px;
+        }
+
+        #header-content > p {
+          text-align: left;
+        }
+
+        #search-bar-one {
+          display: none;
+        }
+
+        #search-bar-glass {
+          display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav id=navbar-container>
+      <a href="http://127.0.0.1:5500/index.html" class=nav-link style="text-decoration: none">
+        <img id='pexels-logo' src="pexels-logo.png" alt='pexels-logo'>
+        <p id=pexels-logo-one >Pexels</p>
+      </a>
+      <form class='search-form' id='search-form-one'>
+        <input class='search-bar' id='search-bar-one' placeholder="Search for free photos" type="text">
+        <button id='search-bar-glass' type="submit" class="search-button">
+            <img src="searchglass.png">
+        </button>
+      </form>
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Explore</button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+      <a href="https://www.pexels.com/license/" class=nav-link id=license-ctn style="text-decoration: none">License</a>
+      <a href="http://127.0.0.1:5500/index.html" class=nav-link style="text-decoration: none"><img id='notification-dropbtn'src="notification.png"></a>
+      <a href="http://127.0.0.1:5500/index.html" id="upload-btn" style="text-decoration: none">Upload</a>
+    </nav>
+    <header id="header">
+      <div id="header-content">
+        <p>The best free stock photos, royalty free<br> images & videos shared by creators.</p>
+        <form class='search-form' id='search-form-two'>
+          <input class='search-bar' id='search-bar-two' placeholder="Search for free photos" type="text">
+          <button type="submit" class="search-button">
+            <img src="searchglass.png">
+          </button>
+        </form>
+      </div>
+      <div id='img-wrapper'>
+        <img id='header-img' src='header-cover.jpeg'>
+      </div>  
+    </header>
+    <div id='photo-grid'></div>
+    <script>
+
+      function performSearch(searchTerm) {
+        var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+              // Typical action to be performed when the document is ready:
+              var resp = JSON.parse(xhttp.responseText);
+              var photoData = resp.photos;
+              console.log(photoData);  
+              
+              var container = document.querySelector('#photo-grid');
+              container.innerHTML = "";
+              photoData.forEach(photo => {
+                  var photoDiv = document.createElement('div');
+                  photoDiv.innerHTML = `
+                  <img class='each-img' src=${photo.src.portrait}>
+                  `;
+                  photoDiv.classList.add("photo-div");
+                  container.appendChild(photoDiv); 
+                });
+              }
+          };
+          xhttp.open("GET", `https://api.pexels.com/v1/search?query=${searchTerm}`, true);
+          xhttp.setRequestHeader('Authorization', '563492ad6f91700001000001b0e8d60ebdd841db89405f916e4ab74f');
+          xhttp.send();
+      };
+      
+      var searchForms = document.querySelectorAll('.search-form');
+      searchForms.forEach(form => {
+        form.addEventListener('submit', function (e){
+          e.preventDefault();
+          var textValue = form.querySelector('input[type="text"]').value;
+          performSearch(textValue);
+          document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.value = textValue;
+          })
+        })
+    });
+
+            /* When the user clicks on the button,
+            toggle between hiding and showing the dropdown content */
+            function myFunction() {
+              document.getElementById("myDropdown").classList.toggle("show");
+            }
+
+            // Close the dropdown menu if the user clicks outside of it
+            window.onclick = function(event) {
+              if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                  }
+                }
+              }
+            }
+            var nav = document.getElementById('navbar-container');
+            var navBtns = nav.getElementsByClassName('nav-link');
+            var exploreBtn = nav.getElementsByClassName('dropbtn');
+            var uploadBtn = document.getElementById('upload-btn');
+            var navSearch = document.getElementById('search-bar-one');
+            var navSearchGlass = document.getElementById('search-bar-glass');
+            var pexelsLogo = document.getElementById('pexels-logo-one');
+
+            window.addEventListener('scroll', function () {
+              if (window.pageYOffset > 1) {
+                nav.style.backgroundColor = 'white';
+                exploreBtn[0].style.color = '#5c5c5c';
+                uploadBtn.style.color = 'white';
+                uploadBtn.style.backgroundColor = '#10886f';
+                navSearch.style.display = 'block';
+                navSearch.style.backgroundColor = '#F7F7F7';
+                navSearchGlass.style.display = 'block';
+                for (const btn of navBtns) {
+                  btn.style.color = '#5c5c5c';
+                }
+                pexelsLogo.style.color = 'black';
+              } else {
+                nav.style.backgroundColor = '';
+                exploreBtn[0].style.color = 'white';
+                uploadBtn.style.color = 'black';
+                uploadBtn.style.backgroundColor = 'white';
+                navSearch.style.display = 'none';
+                navSearch.style.backgroundColor = '';
+                navSearchGlass.style.display = 'none';
+                for (const btn of navBtns) {
+                  btn.style.color = 'white';
+                }
+                pexelsLogo.style.color = 'white';
+              }
+            });
+
+            performSearch('outdoor activities');
+    </script>
+</body>
+</html>
