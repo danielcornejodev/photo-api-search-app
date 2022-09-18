@@ -5,3 +5,5 @@ Purpose of this project was to:
 👉 Create an AJAX request to fetch data
 👉 Render JSON data on the page with dynamic HTML
 👉 Allow user to search (event listener)
+
+To see how this app works copy in .html file to your VSC and open on live server. Try searching a term in the search box.
